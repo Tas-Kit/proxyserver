@@ -1,0 +1,6 @@
+Django
+djangorestframework
+requests
+django-proxy
+djangorestframework-jwt
+django-revproxy
