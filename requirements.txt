@@ -5,3 +5,4 @@ djangorestframework-jwt
 django-revproxy
 cryptography
 ratelimit
+psycopg2-binary

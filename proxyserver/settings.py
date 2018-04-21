@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import datetime
+import logging
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,16 +27,38 @@ SECRET_KEY = '64)3d-7+yo_j6)89lc1%0#zu8s+32=ty062#8kxtjb8@5f+9ks'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+logger = logging.getLogger('proxyserver')
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fh = logging.FileHandler('proxyserver.log')
+fh.setFormatter(formatter)
+logger.addHandler(fh)
+logger.setLevel(logging.DEBUG if DEBUG else logging.WARNING)
+
 ALLOWED_HOSTS = ['localhost', 'webfront', 'proxyserver', 'taskservice']
 
 URLS = {
     'webfront': 'http://webfront:8000/',
+    'authserver': 'http://authserver:8000/'
 }
 # Application definition
 JWT_AUTH = {
     'JWT_PUBLIC_KEY': open('jwtRS256.key.pub').read(),
     'JWT_ALGORITHM': 'RS256',
-    'JWT_AUTH_COOKIE': 'JWT'
+    'JWT_AUTH_COOKIE': 'JWT',
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=30),
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
+}
+JWT_REFRESH_THRESHOLD = 300
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
 }
 
 INSTALLED_APPS = [
@@ -45,6 +69,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_jwt',
     'proxyserver',
     'revproxy'
 ]
@@ -85,11 +110,13 @@ WSGI_APPLICATION = 'proxyserver.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'HOST': 'psqldb',
+        'PORT': 5432,
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

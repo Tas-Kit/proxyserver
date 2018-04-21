@@ -1,18 +1,35 @@
+from time import time
 from revproxy.views import ProxyView
 from django.shortcuts import redirect
 from revproxy.response import get_django_response
-from django.views.generic import View
+# from django.views.generic import View
 from rest_framework.views import APIView
-from django.http import HttpResponse
+from proxyserver.settings import JWT_REFRESH_THRESHOLD, URLS, logger
+# from django.http import HttpResponse
+# from rest_framework.response import Response
+import requests
+import json
 from rest_framework_jwt.settings import api_settings
+from rest_framework.permissions import IsAuthenticated
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-jwt_decode_handler = api_settings.JWT_DECODE_HANDLER
+decoder = api_settings.JWT_DECODE_HANDLER
 
 
-# def jwt_require(func):
-# 	def wrapper(self, request, path):
-# 		pass
+def handle_jwt_refresh(request):
+    jwt = None
+    try:
+        jwt = request.COOKIES['JWT']
+        exp = decoder(jwt)['exp']
+        now = int(time())
+        if exp - now < JWT_REFRESH_THRESHOLD:
+            response = requests.post(URLS['authserver'] + 'refresh_jwt/', data={'token': jwt})
+            if response.status_code == 200:
+                jwt = json.loads(response.text)['token']
+    except Exception as e:
+        logger.error('Fail to refresh jwt: {0}'.format(str(e)))
+    return jwt
+
 
 class Proxy(ProxyView):
 
@@ -33,23 +50,26 @@ class Proxy(ProxyView):
         return response
 
 
-class APIProxy(Proxy):
+class AuthProxy(APIView, Proxy):
+    authentication_classes = JSONWebTokenAuthentication,
+    permission_classes = IsAuthenticated,
 
     def dispatch(self, request, path=''):
-        return super(Proxy, self).dispatch(request, path)
-
-# class APIProxy(APIView):
-
-#     def get(self, request, path):
-#         print request.COOKIES
-#         jwt = request.COOKIES.get('JWT')
-#         payload = jwt_decode_handler(jwt)
-#         print 'payload', payload
-#         return HttpResponse('success')
-
-#     def post(self, request, path):
-#         print request.META
-#         return HttpResponse('success')
+        request = self.initialize_request(request, path=path)
+        self.request = request
+        self.headers = self.default_response_headers  # deprecate?
+        jwt = None
+        try:
+            self.initial(request, path=path)
+            jwt = handle_jwt_refresh(request)
+            request.META['HTTP_COOKIE'] = request.user.id
+            response = super(APIView, self).dispatch(request, path)
+        except Exception as exc:
+            response = self.handle_exception(exc)
+        self.response = self.finalize_response(request, response, path=path)
+        if jwt is not None:
+            self.response.set_cookie('JWT', jwt)
+        return self.response
 
 # http POST http://localhost:8006/get_jwt/ username="root" password="abc12315"
 # http POST http://localhost:8001/api/ username="root" password="abc12315"

@@ -14,9 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
-from revproxy.views import ProxyView
 from proxyserver.settings import URLS
-from proxyserver.views import Proxy, APIProxy
+from proxyserver.views import Proxy, AuthProxy
 
 urlpatterns = [
     url(r'^admin/(?P<path>.*)', Proxy.as_view(upstream=URLS['webfront'] + 'admin/')),
@@ -25,6 +24,7 @@ urlpatterns = [
     url(r'^signup/$', Proxy.as_view(upstream=URLS['webfront'] + 'signup/')),
     url(r'^reset_password/(?P<path>.*)', Proxy.as_view(upstream=URLS['webfront'] + 'reset_password/')),
     # url(r'^(?P<path>.*)$', Proxy.as_view(upstream=URLS['webfront'])),
-    url(r'^api/v1/(?P<path>.*)', APIProxy.as_view(upstream='http://taskservice:8000/api/v1/')),
-    url(r'^api/(?P<path>.*)', APIProxy.as_view(upstream='http://authserver:8000/')),
+    url(r'^api/v1/(?P<path>.*)', AuthProxy.as_view(upstream='http://taskservice:8000/api/v1/')),
+    # url(r'^api/v1/(?P<path>.*)', AuthProxy.as_view()),
+    # url(r'^api/(?P<path>.*)', AuthProxy.as_view(upstream='http://authserver:8000/')),
 ]
