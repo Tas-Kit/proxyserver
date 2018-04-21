@@ -65,6 +65,7 @@ class AuthProxy(APIView, Proxy):
             request.META['HTTP_COOKIE'] = request.user.id
             response = super(APIView, self).dispatch(request, path)
         except Exception as exc:
+            logger.debug('AuthProxy error {0}'.format(str(exc)))
             response = self.handle_exception(exc)
         self.response = self.finalize_response(request, response, path=path)
         if jwt is not None:
