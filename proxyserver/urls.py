@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from revproxy.views import ProxyView
 from proxyserver.settings import URLS
-from proxyserver.views import Proxy
+from proxyserver.views import Proxy, APIProxy
 
 urlpatterns = [
     url(r'^admin/(?P<path>.*)', Proxy.as_view(upstream=URLS['webfront'] + 'admin/')),
@@ -25,4 +25,6 @@ urlpatterns = [
     url(r'^signup/$', Proxy.as_view(upstream=URLS['webfront'] + 'signup/')),
     url(r'^reset_password/(?P<path>.*)', Proxy.as_view(upstream=URLS['webfront'] + 'reset_password/')),
     # url(r'^(?P<path>.*)$', Proxy.as_view(upstream=URLS['webfront'])),
+    url(r'^api/v1/(?P<path>.*)', APIProxy.as_view(upstream='http://taskservice:8000/api/v1/')),
+    url(r'^api/(?P<path>.*)', APIProxy.as_view(upstream='http://authserver:8000/')),
 ]

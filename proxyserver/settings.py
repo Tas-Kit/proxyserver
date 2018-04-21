@@ -25,12 +25,17 @@ SECRET_KEY = '64)3d-7+yo_j6)89lc1%0#zu8s+32=ty062#8kxtjb8@5f+9ks'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'webfront', 'proxyserver']
+ALLOWED_HOSTS = ['localhost', 'webfront', 'proxyserver', 'taskservice']
 
 URLS = {
     'webfront': 'http://webfront:8000/',
 }
 # Application definition
+JWT_AUTH = {
+    'JWT_PUBLIC_KEY': open('jwtRS256.key.pub').read(),
+    'JWT_ALGORITHM': 'RS256',
+    'JWT_AUTH_COOKIE': 'JWT'
+}
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -39,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'proxyserver',
     'revproxy'
 ]

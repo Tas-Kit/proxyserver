@@ -3,3 +3,5 @@ djangorestframework
 requests
 djangorestframework-jwt
 django-revproxy
+cryptography
+ratelimit
