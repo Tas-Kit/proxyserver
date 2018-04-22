@@ -19,12 +19,10 @@ from proxyserver.views import Proxy, AuthProxy
 
 urlpatterns = [
     url(r'^admin/(?P<path>.*)', Proxy.as_view(upstream=URLS['webfront'] + 'admin/')),
-    url(r'^home/$', Proxy.as_view(upstream=URLS['webfront'] + 'home/')),
+    url(r'^home/$', AuthProxy.as_view(upstream=URLS['webfront'] + 'home/')),
     url(r'^login/$', Proxy.as_view(upstream=URLS['webfront'] + 'login/')),
     url(r'^signup/$', Proxy.as_view(upstream=URLS['webfront'] + 'signup/')),
     url(r'^reset_password/(?P<path>.*)', Proxy.as_view(upstream=URLS['webfront'] + 'reset_password/')),
-    # url(r'^(?P<path>.*)$', Proxy.as_view(upstream=URLS['webfront'])),
-    url(r'^api/v1/(?P<path>.*)', AuthProxy.as_view(upstream='http://taskservice:8000/api/v1/')),
-    # url(r'^api/v1/(?P<path>.*)', AuthProxy.as_view()),
-    # url(r'^api/(?P<path>.*)', AuthProxy.as_view(upstream='http://authserver:8000/')),
+    url(r'^api/v1/(?P<path>.*)', AuthProxy.as_view(upstream=URLS['taskservice'] + 'api/v1/')),
+    url(r'^main/(?P<path>.*)', AuthProxy.as_view(upstream=URLS['webmain'])),
 ]

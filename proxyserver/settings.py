@@ -38,7 +38,10 @@ ALLOWED_HOSTS = ['localhost', 'webfront', 'proxyserver', 'taskservice']
 
 URLS = {
     'webfront': 'http://webfront:8000/',
-    'authserver': 'http://authserver:8000/'
+    'webmain': 'http://webmain:3000/',
+    'authserver': 'http://authserver:8000/',
+    'taskservice': 'http://taskservice:8000/',
+    'base': 'http://localhost:8001/'
 }
 # Application definition
 JWT_AUTH = {
@@ -59,6 +62,7 @@ REST_FRAMEWORK = {
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
+    'EXCEPTION_HANDLER': 'proxyserver.exceptions.handle_exception'
 }
 
 INSTALLED_APPS = [
