@@ -2,16 +2,11 @@ from time import time
 from revproxy.views import ProxyView
 from django.shortcuts import redirect
 from revproxy.response import get_django_response
-# from django.views.generic import View
 from rest_framework.views import APIView
 from proxyserver.settings import JWT_REFRESH_THRESHOLD, URLS, logger
-# from django.http import HttpResponse
-# from rest_framework.response import Response
 import requests
 import json
 from rest_framework_jwt.settings import api_settings
-from rest_framework.permissions import IsAuthenticated
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 decoder = api_settings.JWT_DECODE_HANDLER
 
@@ -51,8 +46,6 @@ class Proxy(ProxyView):
 
 
 class AuthProxy(APIView, Proxy):
-    authentication_classes = JSONWebTokenAuthentication,
-    permission_classes = IsAuthenticated,
 
     def dispatch(self, request, path=''):
         request = self.initialize_request(request, path=path)

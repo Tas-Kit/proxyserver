@@ -9,9 +9,10 @@ from settings import logger, URLS
 def handle_exception(exc, context):
     # Call REST framework's default exception handler first,
     # to get the standard error response.
-    if isinstance(exc, AuthenticationFailed) or \
-            isinstance(exc, NotAuthenticated):
-        request = context['request']
+    request = context['request']
+    if (isinstance(exc, AuthenticationFailed) or
+            isinstance(exc, NotAuthenticated)) and \
+            request.user_agent.browser.family != 'Other':
         original_path = request._request.path_info
         return redirect(URLS['base'] + 'login/' + '?next=' + original_path)
     elif not (isinstance(exc, APIException) or

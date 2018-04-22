@@ -6,3 +6,8 @@ django-revproxy
 cryptography
 ratelimit
 psycopg2-binary
+pyyaml
+ua-parser
+user-agents
+django-user-agents
+python-memcached
