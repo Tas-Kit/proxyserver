@@ -15,11 +15,11 @@ def handle_exception(exc, context):
             request.user_agent.browser.family != 'Other':
         original_path = request._request.path_info
         return redirect(URLS['base'] + 'login/' + '?next=' + original_path)
-    elif not (isinstance(exc, APIException) or
-              isinstance(exc, Http404) or
-              isinstance(exc, PermissionDenied)):
-        logger.error('Unhandled Exception: {0}'.format(str(exc)))
-        exc = APIException('Internal Server Error: '.format(str(exc), code=500))
+    # elif not (isinstance(exc, APIException) or
+    #           isinstance(exc, Http404) or
+    #           isinstance(exc, PermissionDenied)):
+    #     logger.error('Unhandled Exception: {0}'.format(str(exc)))
+    #     exc = APIException('Internal Server Error: '.format(str(exc), code=500))
     response = exception_handler(exc, {})
 
     # Now add the HTTP status code to the response.
