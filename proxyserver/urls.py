@@ -14,8 +14,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
-from proxyserver.settings import URLS
+from django.conf import settings
 from proxyserver.views import Proxy, AuthProxy
+
+URLS = settings.URLS
 
 urlpatterns = [
     url(r'^admin/(?P<path>.*)', Proxy.as_view(upstream=URLS['webfront'] + 'admin/')),

@@ -3,7 +3,7 @@ from rest_framework.views import exception_handler
 from django.http import Http404
 from django.shortcuts import redirect
 from django.core.exceptions import PermissionDenied
-from settings import logger, URLS
+from django.conf import settings
 
 
 def handle_exception(exc, context):
@@ -14,7 +14,7 @@ def handle_exception(exc, context):
             isinstance(exc, NotAuthenticated)) and \
             request.user_agent.browser.family != 'Other':
         original_path = request._request.path_info
-        return redirect(URLS['base'] + 'login/' + '?next=' + original_path)
+        return redirect(settings.URLS['base'] + 'login/' + '?next=' + original_path)
     # elif not (isinstance(exc, APIException) or
     #           isinstance(exc, Http404) or
     #           isinstance(exc, PermissionDenied)):

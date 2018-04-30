@@ -21,20 +21,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '64)3d-7+yo_j6)89lc1%0#zu8s+32=ty062#8kxtjb8@5f+9ks'
+# logger = logging.getLogger('proxyserver')
+# formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# fh = logging.FileHandler('proxyserver.log')
+# fh.setFormatter(formatter)
+# logger.addHandler(fh)
+# logger.setLevel(logging.DEBUG if DEBUG else logging.WARNING)
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-logger = logging.getLogger('proxyserver')
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-fh = logging.FileHandler('proxyserver.log')
-fh.setFormatter(formatter)
-logger.addHandler(fh)
-logger.setLevel(logging.DEBUG if DEBUG else logging.WARNING)
-
-ALLOWED_HOSTS = ['localhost', 'webfront', 'proxyserver', 'taskservice']
+ALLOWED_HOSTS = ['localhost', 'webfront', 'proxyserver', 'taskservice', '10.0.0.212']
 
 URLS = {
     'webfront': 'http://webfront:8000/',
@@ -45,7 +39,6 @@ URLS = {
 }
 # Application definition
 JWT_AUTH = {
-    'JWT_PUBLIC_KEY': open('jwtRS256.key.pub').read(),
     'JWT_ALGORITHM': 'RS256',
     'JWT_AUTH_COOKIE': 'JWT',
     'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=30),
@@ -66,24 +59,26 @@ REST_FRAMEWORK = {
 }
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    # 'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+
+    'django.contrib.contenttypes',
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_jwt',
     'proxyserver',
     'revproxy',
     'django_user_agents',
+    'sslserver'
 ]
 
 # Cache backend is optional, but recommended to speed up user agent parsing
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
+        'LOCATION': 'memcached:11211',
     }
 }
 
@@ -92,12 +87,13 @@ CACHES = {
 USER_AGENTS_CACHE = 'default'
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+
+    'django.middleware.security.SecurityMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_user_agents.middleware.UserAgentMiddleware',
 ]
