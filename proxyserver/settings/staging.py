@@ -36,5 +36,5 @@ URLS = {
     'webmain': 'http://webmain:3000/',
     'authserver': 'http://authserver:8000/',
     'taskservice': 'http://taskservice:8000/',
-    'base': 'https://localhost:10003/'
+    'base': 'https://sandbox.tas-kit.com/'
 }
