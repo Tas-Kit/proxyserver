@@ -23,7 +23,6 @@ URLS = settings.URLS
 urlpatterns = [
     url(r'^$', RedirectView.as_view(url='main', permanent=False)),
     url(r'^admin/(?P<path>.*)', Proxy.as_view(upstream=URLS['webfront'] + 'admin/')),
-    url(r'^home/$', AuthProxy.as_view(upstream=URLS['webfront'] + 'home/')),
     url(r'^login/$', Proxy.as_view(upstream=URLS['webfront'] + 'login/')),
     url(r'^signup/$', Proxy.as_view(upstream=URLS['webfront'] + 'signup/')),
     url(r'^reset_password/(?P<path>.*)', Proxy.as_view(upstream=URLS['webfront'] + 'reset_password/')),
