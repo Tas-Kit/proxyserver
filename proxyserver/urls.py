@@ -15,11 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.conf import settings
+from django.views.generic import RedirectView
 from proxyserver.views import Proxy, AuthProxy
 
 URLS = settings.URLS
 
 urlpatterns = [
+    url(r'^$', RedirectView.as_view(url='main', permanent=False)),
     url(r'^admin/(?P<path>.*)', Proxy.as_view(upstream=URLS['webfront'] + 'admin/')),
     url(r'^home/$', AuthProxy.as_view(upstream=URLS['webfront'] + 'home/')),
     url(r'^login/$', Proxy.as_view(upstream=URLS['webfront'] + 'login/')),
