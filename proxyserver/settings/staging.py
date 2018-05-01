@@ -5,6 +5,7 @@ setting_path = 'proxyserver/settings/'
 DEBUG = False
 JWT_AUTH['JWT_PUBLIC_KEY'] = open(setting_path + 'staging.key.pub').read()
 SECRET_KEY = os.environ['SECRET_KEY']
+ALLOWED_HOSTS.append('sandbox.tas-kit.com')
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 X_FRAME_OPTIONS = 'DENY'

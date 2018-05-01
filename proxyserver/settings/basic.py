@@ -28,7 +28,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # logger.addHandler(fh)
 # logger.setLevel(logging.DEBUG if DEBUG else logging.WARNING)
 
-ALLOWED_HOSTS = ['localhost', 'webfront', 'proxyserver', 'taskservice', '10.0.0.212']
+ALLOWED_HOSTS = ['localhost', 'webfront', 'proxyserver', 'taskservice']
 
 URLS = {
     'webfront': 'http://webfront:8000/',
