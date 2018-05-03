@@ -32,10 +32,4 @@ DATABASES = {
     }
 }
 
-URLS = {
-    'webfront': 'http://webfront:8000/',
-    'webmain': 'http://webmain:3000/',
-    'authserver': 'http://authserver:8000/',
-    'taskservice': 'http://taskservice:8000/',
-    'base': 'https://sandbox.tas-kit.com/'
-}
+URLS['base'] = 'https://sandbox.tas-kit.com/'

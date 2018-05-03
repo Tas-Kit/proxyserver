@@ -13,6 +13,5 @@ if [[ $DJANGO_SETTINGS_MODULE = *"dev" ]]; then
     python manage.py runserver 0.0.0.0:8000
 else
     echo "Starting HTTPS Server"
-    python manage.py runserver 0.0.0.0:8001 &
     python manage.py runsslserver 0.0.0.0:8000
 fi
