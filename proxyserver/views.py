@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from django.conf import settings
 import requests
 import json
+import os
 from rest_framework_jwt.settings import api_settings
 from ratelimit.decorators import ratelimit
 # import the logging library
@@ -76,4 +77,9 @@ class AuthProxy(APIView, Proxy):
         self.response = self.finalize_response(request, response, path=path)
         if jwt is not None:
             self.response.set_cookie('JWT', jwt)
+        if 'staging' in os.environ['DJANGO_SETTINGS_MODULE'] \
+                and 'HTTP_ORIGIN' in request.META \
+                and 'localhost' in request.META['HTTP_ORIGIN']:
+            self.response['Access-Control-Allow-Origin'] = request.META['HTTP_ORIGIN']
+            self.response["Access-Control-Allow-Credentials"] = 'true'
         return self.response
