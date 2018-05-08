@@ -14,7 +14,14 @@ def handle_exception(exc, context):
             isinstance(exc, NotAuthenticated)) and \
             request.user_agent.browser.family != 'Other':
         original_path = request._request.path_info
-        return redirect(settings.URLS['base'] + 'login/' + '?next=' + original_path)
+        headers = request.META
+        print headers
+        if 'HTTP_REFERER' in headers and \
+                '/api/' not in headers['HTTP_REFERER'] \
+                and '/api/' in headers['PATH_INFO']:
+            pass
+        else:
+            return redirect(settings.URLS['base'] + 'login/' + '?next=' + original_path)
     # elif not (isinstance(exc, APIException) or
     #           isinstance(exc, Http404) or
     #           isinstance(exc, PermissionDenied)):

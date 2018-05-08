@@ -24,7 +24,11 @@ def handle_jwt_refresh(request):
         exp = decoder(jwt)['exp']
         now = int(time())
         if exp - now < settings.JWT_REFRESH_THRESHOLD:
-            response = requests.post(settings.URLS['authserver'] + 'refresh_jwt/', data={'token': jwt})
+            response = requests.post(
+                settings.URLS['authserver'] + 'refresh_jwt/',
+                data={
+                    'token': jwt
+                })
             if response.status_code == 200:
                 jwt = json.loads(response.text)['token']
     except Exception as e:
