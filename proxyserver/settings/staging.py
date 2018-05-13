@@ -20,6 +20,7 @@ SECURE_HSTS_PRELOAD = True
 # INSTALLED_APPS.append('djangosecure')
 # INSTALLED_APPS.append('sslserver')
 # MIDDLEWARE.append('djangosecure.middleware.SecurityMiddleware')
+JWT_AUTH['JWT_EXPIRATION_DELTA'] = datetime.timedelta(hours=2)
 
 DATABASES = {
     'default': {
