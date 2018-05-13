@@ -83,5 +83,6 @@ class AuthProxy(APIView, Proxy):
             self.response['Access-Control-Allow-Origin'] = request.META['HTTP_ORIGIN']
             self.response['Access-Control-Allow-Credentials'] = 'true'
             self.response['Access-Control-Request-Headers'] = ['Content-Type']
+            self.response['Access-Control-Allow-Methods'] = ['GET', 'POST', 'PATCH']
             # : X-PINGOTHER,
         return self.response
