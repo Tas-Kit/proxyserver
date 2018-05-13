@@ -82,7 +82,6 @@ class AuthProxy(APIView, Proxy):
                 and 'localhost' in request.META['HTTP_ORIGIN']:
             self.response['Access-Control-Allow-Origin'] = request.META['HTTP_ORIGIN']
             self.response['Access-Control-Allow-Credentials'] = 'true'
-            self.response['Access-Control-Request-Headers'] = ['Content-Type', 'X-PINGOTHER']
-            self.response['Access-Control-Allow-Methods'] = ['GET', 'POST', 'PATCH']
-            # : X-PINGOTHER,
+            self.response['Access-Control-Allow-Headers'] = 'Content-Type'
+            self.response.status_code = 200
         return self.response
