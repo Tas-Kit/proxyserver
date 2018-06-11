@@ -63,10 +63,10 @@ JWT_AUTH = {
     'JWT_AUTH_COOKIE': 'JWT',
     'JWT_PUBLIC_KEY': open(secrets_path + 'jwtRS256.key.pub').read(),
     'JWT_EXPIRATION_DELTA': datetime.timedelta(
-        minutes=int(os.getenv('JWT_EXPIRATION_DELTA'), 120)),
+        minutes=int(os.getenv('JWT_EXPIRATION_DELTA', 120))),
     'JWT_ALLOW_REFRESH': True,
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(
-        days=int(os.getenv('JWT_REFRESH_EXPIRATION_DELTA'), 7)),
+        days=int(os.getenv('JWT_REFRESH_EXPIRATION_DELTA', 7))),
 }
 JWT_REFRESH_THRESHOLD = 300
 
