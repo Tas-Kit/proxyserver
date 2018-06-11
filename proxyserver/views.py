@@ -26,7 +26,7 @@ def handle_jwt_refresh(request):
         now = int(time())
         if exp - now < settings.JWT_REFRESH_THRESHOLD:
             response = requests.post(
-                settings.URLS['authserver'] + 'refresh_jwt/',
+                settings.USERSERVICE + '/refresh_jwt/',
                 data={
                     'token': jwt
                 })

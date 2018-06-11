@@ -15,17 +15,17 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.conf import settings
-from django.views.generic import RedirectView
-from proxyserver.views import Proxy, AuthProxy
-
-URLS = settings.URLS
+from proxyserver.views import AuthProxy, Proxy
 
 urlpatterns = [
-    url(r'^$', RedirectView.as_view(url='main', permanent=False)),
-    url(r'^admin/(?P<path>.*)', Proxy.as_view(upstream=URLS['webfront'] + 'admin/')),
-    url(r'^login/$', Proxy.as_view(upstream=URLS['webfront'] + 'login/')),
-    url(r'^signup/$', Proxy.as_view(upstream=URLS['webfront'] + 'signup/')),
-    url(r'^reset_password/(?P<path>.*)', Proxy.as_view(upstream=URLS['webfront'] + 'reset_password/')),
-    url(r'^api/v1/(?P<path>.*)', AuthProxy.as_view(upstream=URLS['taskservice'] + 'api/v1/')),
-    url(r'^main/(?P<path>.*)', AuthProxy.as_view(upstream=URLS['webmain'])),
+    url(r'^api/v1/userservice/exempt/', Proxy.as_view(upstream=settings.USERSERVICE + '/exempt/')),
+    url(r'^api/v1/userservice/', AuthProxy.as_view(upstream=settings.USERSERVICE)),
+    url(r'^api/v1/taskservice/', AuthProxy.as_view(upstream=settings.TASKSERVICE))
+    # url(r'^$', RedirectView.as_view(url='main', permanent=False)),
+    # url(r'^admin/(?P<path>.*)', Proxy.as_view(upstream=URLS['webfront'] + 'admin/')),
+    # url(r'^login/$', Proxy.as_view(upstream=URLS['webfront'] + 'login/')),
+    # url(r'^signup/$', Proxy.as_view(upstream=URLS['webfront'] + 'signup/')),
+    # url(r'^reset_password/(?P<path>.*)', Proxy.as_view(upstream=URLS['webfront'] + 'reset_password/')),
+    # url(r'^api/v1/(?P<path>.*)', AuthProxy.as_view(upstream=URLS['taskservice'] + 'api/v1/')),
+    # url(r'^main/(?P<path>.*)', AuthProxy.as_view(upstream=URLS['webmain'])),
 ]

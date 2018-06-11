@@ -20,7 +20,7 @@ def handle_exception(exc, context):
                 and '/api/' in headers['PATH_INFO']:
             pass
         else:
-            return redirect(settings.URLS['base'] + 'login/' + '?next=' + original_path)
+            return redirect(settings.BASE_URL + '/web/basic/login?next=' + original_path)
     # elif not (isinstance(exc, APIException) or
     #           isinstance(exc, Http404) or
     #           isinstance(exc, PermissionDenied)):
